@@ -6,24 +6,19 @@
 # Data: <dd/mm/aaaa>
 # Objetivo: entender os fundamentos da linguagem R
 
-
 # ATALHO PARA CRIAR SEÇÕS DE CÓDIGO: CTRL + SHIFT + R
 
-# ==========================================
-# BLOCO 0 - Configuracoes globais
-# ==========================================
+# Corporação global -------------------------------------------------------
+
 
 # Ajusta localidade para portugues (datas, mensagens e formatos)
 Sys.setlocale("LC_ALL", "pt_BR.UTF-8")
 
+# R como uma grande calculadora -------------------------------------------
 
-# ==========================================
-# BLOCO 1 - R como uma grande calculadora
-# ==========================================
 
 # Carrega o pacote se ele tiver sido instalado
 library(tidyverse)
-
 
 # Operacoes aritmeticas basicas
 
@@ -72,10 +67,7 @@ sqrt(225)
 # arredondamento para 2 casas decimais
 round(3.14159, digits = 2)
 
-
-# ============================================================
-# BLOCO 2 - Tipos Atômicos e classes
-# ============================================================
+# Tipos Atômicos e classes ------------------------------------------------
 
 # Os tipos de dados definem como os dados
 # são armazenados na memória.
@@ -113,9 +105,10 @@ f <- as.numeric(c)
 f
 
 
-# ============================================================
-# BLOCO 3 - Vetores numericos e vetorizacao
-# ============================================================
+
+# Vetores numericos e vetorizacao -----------------------------------------
+
+
 
 # Atalho de teclado para inserir <- :
 # Alt + - (Windows/Linux)
@@ -166,10 +159,7 @@ max(receita_diaria)
 ?mean
 ?length
 
-
-# ============================================================
-# BLOCO 4 - Vetores
-# ============================================================
+#  Vetores ----------------------------------------------------------------
 
 # vetor de caracteres (strings) com nome da empresa
 nome_empresa <- c("Loja A", "Loja B", "Loja C")
@@ -186,10 +176,9 @@ meta_batida
 class(meta_batida)
 
 
-# ============================================================
-# BLOCO 5 - Criando uma tibble com dados ficticios de vendas
-# e primeiros exemplos com dplyr
-# ============================================================
+# Criando uma tibble com dados ficticios de vendas ------------------------
+
+
 
 # Neste bloco vamos criar um pequeno conjunto de dados
 # semelhante a um banco de dados simples de vendas.
@@ -237,7 +226,6 @@ class(vendas_diarias)
 # MINHA RESPOSTA
 # É exatamente isso que vamos aprender a responder com o dplyr.”
 
-
 # ------------------------------------------------------------
 # Primeiros exemplos simples com dplyr
 # ------------------------------------------------------------
@@ -249,14 +237,12 @@ class(vendas_diarias)
 vendas_diarias |>
   select(data, loja, receita)
 
-
 # Exemplo 2
 # Pergunta de negócio:
 # Em quais dias o lucro foi maior que 3000?
 
 vendas_diarias |>
   filter(lucro > 3000)
-
 
 # Exemplo 3
 # Pergunta de negócio:
@@ -265,14 +251,12 @@ vendas_diarias |>
 vendas_diarias |>
   filter(loja == "Centro")
 
-
 # Exemplo 4
 # Pergunta de negócio:
 # Quais foram os dias com maior receita?
 
 vendas_diarias |>
   arrange(desc(receita))
-
 
 # Exemplo 5
 # Pergunta de negócio:
@@ -286,7 +270,6 @@ receita_por_loja <- vendas_diarias |>
   )
 # exibe o resultado
 receita_por_loja
-
 
 # Exemplo 6
 # Pergunta de negócio:
@@ -306,9 +289,8 @@ vendas_diarias |>
 vendas_diarias |>
   filter(between(receita, 10000, 11500))
 
-# ============================================================
-# BLOCO 6 - Manipulação de dados com dplyr e uso do pipe
-# ============================================================
+
+#  Manipulação de dados com dplyr e uso do pipe ---------------------------
 
 # O operador pipe |> permite encadear operações
 # de forma mais legível.
@@ -324,25 +306,6 @@ vendas_diarias |>
 #   funcao2() |>
 #   funcao3()
 
-
-# ------------------------------------------------------------
-# Boas práticas no RStudio
-# ------------------------------------------------------------
-
-# LEMBRAR DE MOSTRAR PARA OS ALUNOS:
-
-# 1) Configurar o RStudio para usar o pipe nativo |>
-
-# 2) Atalho de teclado para inserir pipe
-# Ctrl + Shift + M (Windows/Linux)
-
-# 3) Formatar código automaticamente
-# Code -> Reformat Selection
-
-# 4) (OPCIPONAL) Mostrar como reorganizar os painéis do RStudio
-# Console, Environment, Source, Files etc.
-
-
 # ------------------------------------------------------------
 # Exemplo 1 - selecionar e ordenar dados
 # ------------------------------------------------------------
@@ -353,7 +316,6 @@ vendas_diarias |>
 vendas_diarias |>
   select(data, loja, receita) |>
   arrange(desc(receita))
-
 
 # ------------------------------------------------------------
 # Exemplo 2 - filtrar e selecionar
@@ -366,7 +328,6 @@ vendas_diarias |>
   filter(lucro > 3000) |>
   select(data, loja, receita, lucro)
 
-
 # ------------------------------------------------------------
 # Exemplo 3 - resumo estatístico
 # ------------------------------------------------------------
@@ -378,7 +339,6 @@ vendas_diarias |>
     receita_media = mean(receita),
     lucro_medio = mean(lucro)
   )
-
 
 # ------------------------------------------------------------
 # Exemplo 4 - análise por loja
@@ -408,10 +368,7 @@ vendas_diarias |>
   ) |>
   arrange(desc(receita_media))
 
-
-# ============================================================
-# BLOCO 7 - Visualizacao de dados com ggplot2
-# ============================================================
+# Visualizacao de dados com ggplot2 ---------------------------------------
 
 # Grafico 1 de barras da receita media por loja
 ggplot(receita_por_loja, aes(x = loja, y = receita_media)) +
@@ -446,11 +403,7 @@ ggplot(vendas_diarias, aes(x = despesa, y = receita)) +
 ggplot(vendas_diarias, aes(x = data, y = lucro, size = receita, color = loja)) +
   geom_point()
 
-
-# ============================================================
-# BLOCO 8 - Resolução dos exercícios propostos nos slides
-# ============================================================
-
+# Resolução dos exercíciosda lista 1 ---------------------------
 
 # Solução do Ex. 1
 
@@ -467,7 +420,6 @@ custo_total
 ## cálculo do custo médio usando a função mean() e removendo NA
 custo_medio <- mean(custos_semanais, na.rm = TRUE)
 custo_medio
-
 
 # Solução do Ex. 3
 
@@ -486,7 +438,6 @@ custo_maximo
 vendas_diarias |>
   select(loja)
 
-
 # Solução do Ex. 5
 
 # filtra somente os dias em que a margem foi maior que 0.30
@@ -500,7 +451,6 @@ vendas_diarias |>
 # são verdadeiras ao mesmo tempo
 vendas_diarias |>
   filter(loja == "Online" & lucro > 3000)
-
 
 # Solução do Ex. 7
 
@@ -516,7 +466,6 @@ vendas_diarias |>
   summarise(
     despesa_media = mean(despesa)
   )
-
 
 # Solução do Ex. 9
 
@@ -536,15 +485,12 @@ ggplot(vendas_diarias, aes(x = data, y = despesa)) +
   # desenha uma linha para mostrar a evolução da despesa
   geom_line()
 
-
-
 # Solução do Ex. 11
 
 # define receita no eixo x e lucro no eixo y
 ggplot(vendas_diarias, aes(x = receita, y = lucro)) +
   # desenha um ponto para cada observação
   geom_point()
-
 
 # Solução do Ex. 12
 
@@ -572,7 +518,6 @@ lucro_por_loja
 # 2. Fazemos o gráfico de barras do lucro médio por loja
 ggplot(lucro_por_loja, aes(x = loja, y = lucro_medio)) +
   geom_col()
-
 
 
 # ------------------------- FIM -------------------------------------------#
