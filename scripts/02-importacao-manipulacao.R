@@ -231,10 +231,9 @@ dados_vendas_limpos |>
  #Exibe o resultado
  receita_media_cidade
  
+ #git push origin main acessar conta github (Tava sem internet)
 
-#git push origin main acessar conta github (Tava sem internet)
-
-
+                       
 
 
 
