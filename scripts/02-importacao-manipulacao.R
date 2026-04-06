@@ -1,6 +1,6 @@
 # Arquivo: 02-importacao-manipulacao.R
-# Autor(a): <seu nome>
-# Data: <dd/mm/aaaa>
+# Autor(a): <Leticia PaOla de souza>
+# Data: <30/03/26>
 # Objetivos:
 # 1. Importar um arquivo csv de dados
 # 2. Preparar os dados para análise
@@ -59,3 +59,145 @@ dados_vendas_limpos <- dados_vendas |>
 
 # verifica a estrutura dos dados
 glimpse(dados_vendas_limpos)
+
+# Salva o sdados limpos em arquivo rds para 
+# análises futuras sem precisar repetir a preparação
+# dos dados 
+
+## 1. Define o caminho relativo para salvar o arquivo rds 
+caminho_rds <-  here ("dados/limpos/dados_vendas_limpos.rds")
+
+## 2.Salva o objeto dados_vendas_limpos no formato rds
+readr:: write_rds(dados_vendas_limpos, caminho_rds)
+
+
+# Lendo os dados limpos em uma seção futura
+
+## 1.Define o caminho relativo do arquivo rds 
+caminho_rds <- here ("dados/limpos/dados_vendas_limpos.rds") 
+
+## 2.Lê o arquivo rds e armazena em um objeto 
+dados_vendas_limpos <- readr::read_rds(caminho_rds) 
+
+
+# Função filter () --------------------------------------------------------
+
+#filtra as vendas realizadas na cidade de "Formiga"
+dados_vendas_limpos |> 
+  filter(cidade == "Formiga")
+
+#filtra as vendas realizadas por um representante específico 
+dados_vendas_limpos |> 
+  filter(representante == "Representante 1")
+
+#Filtra as vendas realizadas em Formiga por um representante específico 
+dados_vendas_limpos |> 
+  filter(cidade =="Formiga" & representante =="Representante 1")
+
+
+#filtra as vendas realizadas em Formiga ou em Arcos com operador |
+dados_vendas_limpos |> 
+  filter(cidade == "Formiga"| cidade == "Arcos")
+
+#filtra as mesmas vendas usando %in% , uma forma  mais compacta 
+# para múltiplas comparações da mesma variável 
+dados_vendas_limpos |> 
+  filter(cidade %in% c("Formiga" , "Arcos"))
+
+#salva o resultado em novo objeto 
+dados_vendas_formiga_arcos <- dados_vendas_limpos |> 
+  filter(cidade %in% c ("Formiga","Arcos"))
+
+#exibe resultado 
+dados_vendas_formiga_arcos
+
+
+
+# A função Select ---------------------------------------------------------
+
+#seleciona apenas as colunas cidade,produto e receita
+dados_vendas_limpos |> 
+  select(cidade,produto,receita)
+
+#Remove as colunas representante e cidade
+dados_vendas_limpos |> 
+  select(-representante , -cidade)
+
+#Salvando o resultado em um novo objeto
+dados_vendas_selecionados <- dados_vendas_limpos |> 
+  select(cidade,produto,receita)
+
+#exibe resultado
+dados_vendas_selecionados
+
+
+# A Função Mutate ---------------------------------------------------------
+
+#cria a variável preco_desconto (10% sobre preco_unitário)
+
+dados_vendas_limpos |> 
+  mutate(preco_desconto = preco_unitario*0.9)
+
+#cria a variável receita_total
+dados_vendas_limpos |> 
+  mutate(receita_total = unidades*preco_unitario)
+
+#Cria a variável receita total ,agrupa por cidade,
+#calcula a receita total por cidade e ordena resultado
+ dados_vendas_limpos |> 
+   mutate(receita_total = unidades*preco_unitario) |> 
+   group_by(cidade) |> 
+   summarise(receita_total_cidade = sum (receita_total)) |> 
+   arrange(desc(receita_total_cidade))
+
+
+
+#Cria a variável categoria_receita
+ dados_vendas_limpos |> 
+   mutate(categoria_receita = ifelse(receita >1000 ,"Alta","Baixa")) |> 
+   select(cidade,produto,categoria_receita)
+
+
+#Cria a variável "categoria_receita" com multiplas categorias
+ dados_vendas_limpos |> 
+   mutate(categoria_receita = case_when(
+     receita >1000 ~"Alta",
+     receita >500 & receita <= 1000 ~"Média",
+     receita >0 & receita <= 500 ~"Baixa",
+     TRUE ~ "Sem Receita"
+   )) |> 
+   select(cidade,produto,categoria_receita)
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
