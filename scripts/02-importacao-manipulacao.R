@@ -168,19 +168,71 @@ dados_vendas_limpos |>
    )) |> 
    select(cidade,produto,categoria_receita)
     
+#06/04
+
+# As funções sumarise e group_by ------------------------------------------
+
+#Calcula a receita média
+ dados_vendas_limpos |> 
+   summarise(receita_media = mean(receita))
+ 
+ #Calcula a receita total
+ dados_vendas_limpos |> 
+   summarise(receita_total = sum(receita))
+
+ #Calcula o número de representantes distintos nos dados
+ dados_vendas_limpos |> 
+   summarise ( numero_representante = n_distinct(representante))
+ 
+ #Calcula o número total de vendas realizadas 
+ dados_vendas_limpos |> 
+   summarise ( total_vendas = n())
+
+#Calcula a receita média por cidade
+ dados_vendas_limpos |> 
+ group_by(cidade) |> 
+ summarise(receita_media = mean(receita))
+ 
+#Calcular a receita média por produto
+ dados_vendas_limpos |> 
+ group_by(produto) |> 
+ summarise(receita_media = mean(receita))
+ 
+ #Calcula a receita média por cidade e produto
+ dados_vendas_limpos |> 
+   group_by(cidade,produto) |> 
+   summarise(receita_media = mean(receita))
 
 
+# A função arrange --------------------------------------------------------
 
+#Ordena os dados por receita em ordem crescente(menor venda)
+ dados_vendas_limpos |> 
+   arrange(receita)
+ 
+#Ordena os dados por receita em ordem decrescente(maior venda)
+ dados_vendas_limpos |> 
+   arrange(desc(receita))
+ 
+#Ordena receita média por cidade em ordem crescente 
+ dados_vendas_limpos |> 
+    group_by(cidade) |>
+   summarise(receita_media = mean (receita)) |> 
+   arrange(receita_media)
+   
+#Ordena a receita média por cidade em ordem decrescente
+ #Salva o resultado em um novo objeto
+ receita_media_cidade <-
+   dados_vendas_limpos |> 
+   group_by(cidade) |> 
+   summarise(receita_media = mean(receita)) |> 
+   arrange(desc(receita_media))
+ 
+ #Exibe o resultado
+ receita_media_cidade
+ 
 
-
-
-
-
-
-
-
-
-
+#git push origin main acessar conta github (Tava sem internet)
 
 
 
