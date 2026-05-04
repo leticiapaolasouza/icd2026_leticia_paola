@@ -48,59 +48,82 @@ caminho_agencias <- here("dados/brutos/agencias.csv")
   
   # Exercício 2 ----------------------------------------------------------
 
-# 2.a)dados_agencias_plenas |>
-  filter = dados_
+  # 2.a)
   
-
-
-# 2.b)
-
-
-# 2.c)
-
-
-
-# Exercício 3 ---------------------------------------------------------
-
-# 3.a) pivot_longer
-
-# reorganiza os dados de crédito em trimestre e volume_credito
-
-dados_credito_longo <-dados_credito 
-    
-  pivot_longer(
-    cols = -empresa,
-    names_to = c("indicador", "trimestre"),
-    names_sep = "_",
-    values_to = "valor"
-  )
+  dados_agencias_plenas <- dados_agencias |>
+    filter(tipo_agencia == "Plena")
   
   
-  ##codigo_agencia, trimestre e volume_credito
+  # 2.b)
+  dados_agencias_plenas |>
+    select(nome_agencia, cidade, num_cooperados) |>
+    arrange(desc(dados_agencias_plenas))
+  
+  # 2.c)
+  
+  dados_agencias_plenas |>
+    filter(cidade == "Divinopolis" | num_cooperados > 1000 )
+
+
+  # Exercício 3 ---------------------------------------------------------
+  
+  # 3.a) pivot_longer
+  
+  # reorganiza os dados de crédito em trimestre e volume_credito
+  dados_credito_longo <- dados_credito |> 
+    pivot_longer(
+      cols = -codigo_agencia,
+      names_to = "trimestre",
+      values_to = "volume_credito"
+    )
+  
+  glimpse(dados_credito_longo)
+  
   # 3.b) left_join
   
   # combina `dados_credito_longo`com `dados_agencias`
-  dados_completos <-
+  dados_completos <- dados_credito_longo |> 
+    left_join(dados_agencias, by = "codigo_agencia")
   
+  glimpse(dados_completos)
   
   
   # Exercício 4 ---------------------------------------------------------
-
-# cria dados_analise com credito_por_cooperado
-dados_analise <- 
+  
+  # cria dados_analise com credito_por_cooperado
+  dados_analise <- dados_completos |> 
+    mutate(credito_por_cooperado = volume_credito/num_cooperados)
   
   # resume por cidade e ordena por volume_total
   dados_analise |>
+    group_by(cidade) |> 
+    summarise(
+      volume_total = sum(volume_credito),
+      media_dos_creditos_por_cooperado = mean(credito_por_cooperado)
+    ) |> 
+    arrange(desc(volume_total))
   
   
   # Resposta do Exercício 4:
   
-  # Cidade com maior volume_total:
-  # Cidade com maior media_dos_creditos_por_cooperado:
+  # Cidade com maior volume_total: Divinópolis
+  # Cidade com maior media_dos_creditos_por_cooperado: Formiga
   
   
   
-  # Exercício 5 ---------------------------------------------------------
-
-# classifica nivel_credito e resume por tipo_agencia
-resumo_por_tipo <- 
+  5 # classifica nivel_credito e resume por tipo_agencia
+  resumo_por_tipo <- dados_analise |>
+    mutate(
+      nivel_credito = case_when(
+        credito_por_cooperado < 1400 ~ "Baixo",
+        credito_por_cooperado >= 1400 & credito_por_cooperado < 1700 ~ "Médio",
+        credito_por_cooperado >= 1700 ~ "Alto"
+      )
+    ) |>
+    group_by(tipo_agencia,nivel_credito) |> 
+    summarise(
+      volume_total = sum(volume_credito),
+      n_obs = n()
+    ) |> 
+    arrange(desc(volume_total))
+  
