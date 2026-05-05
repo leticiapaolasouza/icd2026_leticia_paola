@@ -26,7 +26,6 @@ linguagem R.
 A economia baseada em dados dos dias atuais tem raízes históricas
 discutidas em @harkness2021.
 
-# Referências
-
+# Referência
 ::: {#refs}
 :::
