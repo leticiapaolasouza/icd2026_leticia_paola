@@ -87,7 +87,7 @@ dados_marketing |>
 # 4. Distribuição empírica da receita -------------------------------------
 
 # Visualiza como a receita semanal se distribui nos dados observados.
-# tidyplot() inicia o gráfico e add_histogram() adiciona o histograma.
+# tidyplot() inicia o gráfico e add_histogram() adiciona o histogra
 # O argumento bins controla a quantidade de classes do histograma.
 dados_marketing |>
   tidyplot(x = receita_vendas) |>
